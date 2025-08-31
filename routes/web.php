@@ -387,6 +387,10 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     Route::post('/gateways/paypal', [GatewaysController::class, 'paypal_post']);
     Route::get('/gateways/stripe', [GatewaysController::class, 'stripe'])->name('admin.gateways.stripe');
     Route::post('/gateways/stripe', [GatewaysController::class, 'stripe_post']);
+    Route::get('/gateways/paystack', [GatewaysController::class, 'paystack'])->name('admin.gateways.paystack');
+    Route::post('/gateways/paystack', [GatewaysController::class, 'paystack_post']);
+    Route::get('/gateways/flutterwave', [GatewaysController::class, 'flutterwave'])->name('admin.gateways.flutterwave');
+    Route::post('/gateways/flutterwave', [GatewaysController::class, 'flutterwave_post']);
 
     //Auth Settings
     Route::get('/auth/google', [AuthController::class, 'google'])->name('admin.auth.google');

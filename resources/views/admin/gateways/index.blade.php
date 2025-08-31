@@ -22,6 +22,14 @@
                             <a class="nav-link {{ Route::is('admin.gateways.stripe') ? 'active' : '' }}" href="{{ route('admin.gateways.stripe') }}">
                             <i class="align-middle me-1" data-feather="compass"></i> Stripe Settings </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ Route::is('admin.gateways.paystack') ? 'active' : '' }}" href="{{ route('admin.gateways.paystack') }}">
+                            <i class="align-middle me-1" data-feather="compass"></i> Paystack Settings </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ Route::is('admin.gateways.flutterwave') ? 'active' : '' }}" href="{{ route('admin.gateways.flutterwave') }}">
+                            <i class="align-middle me-1" data-feather="compass"></i> Flutterwave Settings </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -136,6 +144,126 @@
                                 <div class="input-style-1">
                                     <label>Fee Cents</label>
                                     <input type="text" name="stripe_fee_cents" value="{{ get_setting('stripe_fee_cents') }}" placeholder="Fee Cents" />
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                <button type="submit" class="main-btn primary-btn btn-hover">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            @elseif(Route::is('admin.gateways.paystack') )
+
+                <div class="card-style settings-card-2 mb-30">
+                    <form action="{{ route('admin.gateways.paystack') }}" method="POST">
+                        @csrf
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="select-style-1">
+                                <label>Enable Paystack</label>
+                                <div class="select-position">
+                                    <select name="enable_paystack" class="light-bg">
+                                        <option @if (get_setting('enable_paystack') == '1') selected="selected" @endif value="1">Yes</option>
+                                        <option @if (get_setting('enable_paystack') == '0') selected="selected" @endif value="0">No</option>
+                                    </select>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-style-1">
+                                    <label>Public Key</label>
+                                    <input type="text" name="paystack_public_key" value="{{ get_setting('paystack_public_key') }}" placeholder="pk_test_xxxxx or pk_live_xxxxx" />
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-style-1">
+                                    <label>Secret Key</label>
+                                    <input type="text" name="paystack_secret_key" value="{{ get_setting('paystack_secret_key') }}" placeholder="sk_test_xxxxx or sk_live_xxxxx" />
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-style-1">
+                                    <label>Merchant Email</label>
+                                    <input type="email" name="paystack_merchant_email" value="{{ get_setting('paystack_merchant_email') }}" placeholder="your@email.com" />
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-style-1">
+                                    <label>Percentage Fee % (Paystack charges 1.5% for local, 3.9% for international)</label>
+                                    <input type="text" name="paystack_fee" value="{{ get_setting('paystack_fee', '1.5') }}" placeholder="1.5" />
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-style-1">
+                                    <label>Fee Cap (NGN)</label>
+                                    <input type="text" name="paystack_fee_cap" value="{{ get_setting('paystack_fee_cap', '2000') }}" placeholder="2000" />
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                <button type="submit" class="main-btn primary-btn btn-hover">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            @elseif(Route::is('admin.gateways.flutterwave') )
+
+                <div class="card-style settings-card-2 mb-30">
+                    <form action="{{ route('admin.gateways.flutterwave') }}" method="POST">
+                        @csrf
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="select-style-1">
+                                <label>Enable Flutterwave</label>
+                                <div class="select-position">
+                                    <select name="enable_flutterwave" class="light-bg">
+                                        <option @if (get_setting('enable_flutterwave') == '1') selected="selected" @endif value="1">Yes</option>
+                                        <option @if (get_setting('enable_flutterwave') == '0') selected="selected" @endif value="0">No</option>
+                                    </select>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-style-1">
+                                    <label>Public Key</label>
+                                    <input type="text" name="flutterwave_public_key" value="{{ get_setting('flutterwave_public_key') }}" placeholder="FLWPUBK_TEST-xxxxx or FLWPUBK-xxxxx" />
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-style-1">
+                                    <label>Secret Key</label>
+                                    <input type="text" name="flutterwave_secret_key" value="{{ get_setting('flutterwave_secret_key') }}" placeholder="FLWSECK_TEST-xxxxx or FLWSECK-xxxxx" />
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-style-1">
+                                    <label>Encryption Key</label>
+                                    <input type="text" name="flutterwave_encryption_key" value="{{ get_setting('flutterwave_encryption_key') }}" placeholder="FLWSECK_TESTxxxxx" />
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-style-1">
+                                    <label>Percentage Fee % (Flutterwave charges 1.4% for local)</label>
+                                    <input type="text" name="flutterwave_fee" value="{{ get_setting('flutterwave_fee', '1.4') }}" placeholder="1.4" />
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="input-style-1">
+                                    <label>Fee Cap (NGN)</label>
+                                    <input type="text" name="flutterwave_fee_cap" value="{{ get_setting('flutterwave_fee_cap', '2000') }}" placeholder="2000" />
                                 </div>
                             </div>
 

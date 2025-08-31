@@ -19,9 +19,16 @@
 
                     <div class="row">
                         <div class="col-12">
-                          <div class="input-style-1">
+                          <div class="select-style-1">
                             <label>MAIL MAILER</label>
-                            <input type="text" name="mail_mailer" value="{{env('MAIL_MAILER')}}" placeholder="MAIL MAILER" />
+                            <div class="select-position">
+                                <select name="mail_mailer" class="light-bg">
+                                    <option value="smtp" @if(env('MAIL_MAILER') == 'smtp') selected @endif>SMTP</option>
+                                    <option value="ses" @if(env('MAIL_MAILER') == 'ses') selected @endif>Amazon SES</option>
+                                    <option value="sendmail" @if(env('MAIL_MAILER') == 'sendmail') selected @endif>Sendmail</option>
+                                    <option value="log" @if(env('MAIL_MAILER') == 'log') selected @endif>Log (for testing)</option>
+                                </select>
+                            </div>
                           </div>
                         </div>
                         <div class="col-12">
@@ -68,6 +75,37 @@
                         </div>
 
                         <div class="col-12">
+                          <hr>
+                          <h5 class="mb-3">Amazon SES Configuration</h5>
+                          <p class="text-muted small mb-3">Configure these settings if you're using Amazon SES as your mail driver</p>
+                        </div>
+                        <div class="col-12">
+                          <div class="input-style-1">
+                            <label>AWS ACCESS KEY ID</label>
+                            <input type="text" name="aws_access_key_id" value="{{env('AWS_ACCESS_KEY_ID')}}" placeholder="AWS ACCESS KEY ID" />
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <div class="input-style-1">
+                            <label>AWS SECRET ACCESS KEY</label>
+                            <input type="password" name="aws_secret_access_key" value="{{env('AWS_SECRET_ACCESS_KEY')}}" placeholder="AWS SECRET ACCESS KEY" />
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <div class="input-style-1">
+                            <label>AWS REGION</label>
+                            <input type="text" name="aws_default_region" value="{{env('AWS_DEFAULT_REGION', 'us-east-1')}}" placeholder="e.g., us-east-1" />
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <div class="input-style-1">
+                            <label>SES REGION (Optional)</label>
+                            <input type="text" name="ses_region" value="{{env('AWS_SES_REGION')}}" placeholder="Leave empty to use AWS REGION" />
+                            <p class="text-muted small">Only set this if your SES is in a different region than your AWS default region</p>
+                          </div>
+                        </div>
+
+                        <div class="col-12">
                           <button type="submit" class="main-btn primary-btn btn-hover">{{ trans('submit') }}</button>
                         </div>
                       </div>
@@ -82,7 +120,9 @@
                     <h5 class="mb-0 h6">Instructions</h5>
                 </div>
                 <div class="card-body">
-                    <h6 class="text-danger small mb-4">Please be carefull when you are configuring SMTP. For incorrect configuration you will get error at the time of sending emails.</h6>
+                    <h6 class="text-danger small mb-4">Please be careful when configuring email settings. Incorrect configuration will cause email sending failures.</h6>
+                    
+                    <h5 class="text-primary my-3">SMTP Configuration</h5>
                     <h6 class="text-muted my-2">For Non-SSL</h6>
                     <ul class="list-group">
                         <li class="list-group-item text-dark">Select sendmail for Mail Driver if you face any issue after configuring smtp as Mail Driver </li>
@@ -92,11 +132,21 @@
                     </ul>
                     <br>
                     <h6 class="text-muted my-2">For SSL</h6>
-                    <ul class="list-group mar-no">
+                    <ul class="list-group">
                         <li class="list-group-item text-dark">Select sendmail for Mail Driver if you face any issue after configuring smtp as Mail Driver</li>
                         <li class="list-group-item text-dark">Set Mail Host according to your server Mail Client Manual Settings</li>
                         <li class="list-group-item text-dark">Set Mail port as 465</li>
                         <li class="list-group-item text-dark">Set Mail Encryption as ssl</li>
+                    </ul>
+                    
+                    <h5 class="text-primary my-3 mt-4">Amazon SES Configuration</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item text-dark">Select 'Amazon SES' as Mail Mailer</li>
+                        <li class="list-group-item text-dark">Create an IAM user with SES send permissions</li>
+                        <li class="list-group-item text-dark">Verify your sending domain or email address in SES</li>
+                        <li class="list-group-item text-dark">Common regions: us-east-1, eu-west-1, ap-southeast-1</li>
+                        <li class="list-group-item text-dark">Leave SMTP fields empty when using SES</li>
+                        <li class="list-group-item text-dark">Test with sandbox first before requesting production access</li>
                     </ul>
                 </div>
             </div>

@@ -51,6 +51,23 @@ class EmailController extends Controller
                     overWriteEnvFile('MAIL_FROM_NAME',trim($value));
                 }
 
+                // Amazon SES Settings
+                if($type == 'aws_access_key_id'){
+                    overWriteEnvFile('AWS_ACCESS_KEY_ID',trim($value));
+                }
+
+                if($type == 'aws_secret_access_key'){
+                    overWriteEnvFile('AWS_SECRET_ACCESS_KEY',trim($value));
+                }
+
+                if($type == 'aws_default_region'){
+                    overWriteEnvFile('AWS_DEFAULT_REGION',trim($value));
+                }
+
+                if($type == 'ses_region'){
+                    overWriteEnvFile('AWS_SES_REGION',trim($value));
+                }
+
             }
         }
 

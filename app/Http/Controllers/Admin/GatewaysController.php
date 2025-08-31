@@ -57,4 +57,40 @@ class GatewaysController extends Controller
 
         return redirect()->back()->with('success', 'Stripe Settings Updated Successfully');
     }
+
+    public function paystack()
+    {
+        return view('admin.gateways.index');
+    }
+
+    public function paystack_post(Request $request)
+    {
+        $inputs = $request->except(['_token']);
+
+        if(!empty($inputs)){
+            foreach ($inputs as $type => $value) {
+                SettingsUtility::save_settings($type,trim($value));
+            }
+        }
+
+        return redirect()->back()->with('success', 'Paystack Settings Updated Successfully');
+    }
+
+    public function flutterwave()
+    {
+        return view('admin.gateways.index');
+    }
+
+    public function flutterwave_post(Request $request)
+    {
+        $inputs = $request->except(['_token']);
+
+        if(!empty($inputs)){
+            foreach ($inputs as $type => $value) {
+                SettingsUtility::save_settings($type,trim($value));
+            }
+        }
+
+        return redirect()->back()->with('success', 'Flutterwave Settings Updated Successfully');
+    }
 }
