@@ -1,0 +1,345 @@
+/* ==========================================================================
+   Nigerian Theme for eForum
+   ========================================================================== */
+
+/* Nigerian Color Palette */
+:root {
+    /* Nigerian Flag Colors */
+    --nigeria-green: #008751;
+    --nigeria-green-dark: #006940;
+    --nigeria-green-light: #00a65d;
+    --nigeria-white: #ffffff;
+    
+    /* Extended Palette */
+    --eforum-primary: #008751;
+    --eforum-secondary: #f39c12;
+    --eforum-accent: #2ecc71;
+    --eforum-danger: #e74c3c;
+    --eforum-warning: #f39c12;
+    --eforum-info: #3498db;
+    --eforum-success: #27ae60;
+    
+    /* Text Colors */
+    --eforum-text-primary: #2c3e50;
+    --eforum-text-secondary: #7f8c8d;
+    --eforum-text-muted: #95a5a6;
+    
+    /* Background Gradients */
+    --eforum-gradient-primary: linear-gradient(135deg, #008751 0%, #00a65d 100%);
+    --eforum-gradient-secondary: linear-gradient(135deg, #f39c12 0%, #f1c40f 100%);
+    --eforum-gradient-success: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+}
+
+/* Light Theme Override */
+:root[data-theme="light"] {
+    --bg-color: #f8f9fa;
+    --text-color: #2c3e50;
+    --theme: var(--eforum-primary);
+    --theme-white: #ffffff;
+    --theme-black: #1a1a1a;
+    --border-color: #dee2e6;
+    
+    --bg-icons: #e9ecef;
+    --bg-icons-hover: #cbd3da;
+    --bg-icons-border-hover: #adb5bd;
+    --color-icons: #495057;
+    
+    --link-color: var(--eforum-primary);
+    --link-hover: var(--nigeria-green-dark);
+    --form-control: #ffffff;
+    --text-muted: #6c757d;
+    --share-bg: #ffffff;
+    
+    /* Card Backgrounds */
+    --card-bg: #ffffff;
+    --card-hover: #f8f9fa;
+    --card-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    --card-shadow-hover: 0 4px 12px rgba(0,135,81,0.15);
+}
+
+/* Dark Theme Override */
+:root[data-theme="dark"] {
+    --bg-color: #1a1f2e;
+    --text-color: #e1e8ed;
+    --theme: var(--eforum-accent);
+    --theme-white: #22283a;
+    --theme-black: #0a0e1a;
+    --border-color: #2d3748;
+    
+    --bg-icons: #2d3748;
+    --bg-icons-hover: #374151;
+    --bg-icons-border-hover: #4a5568;
+    --color-icons: #cbd5e0;
+    
+    --link-color: var(--eforum-accent);
+    --link-hover: #26bf68;
+    --form-control: #2d3748;
+    --text-muted: #a0aec0;
+    --share-bg: #22283a;
+    
+    /* Card Backgrounds */
+    --card-bg: #22283a;
+    --card-hover: #2d3748;
+    --card-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    --card-shadow-hover: 0 4px 12px rgba(46,204,113,0.2);
+}
+
+/* Nigerian Badge Styles */
+.badge-nigeria {
+    background: var(--eforum-gradient-primary);
+    color: white;
+}
+
+.badge-visa {
+    background-color: #3498db;
+    color: white;
+}
+
+.badge-job {
+    background-color: #f39c12;
+    color: white;
+}
+
+.badge-relationship {
+    background-color: #e91e63;
+    color: white;
+}
+
+/* Verification Badge */
+.verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: var(--eforum-gradient-primary);
+    color: white;
+}
+
+.verified-badge i {
+    font-size: 0.875rem;
+}
+
+/* Nigerian Button Styles */
+.btn-nigeria {
+    background: var(--eforum-gradient-primary);
+    color: white;
+    border: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-nigeria:hover {
+    background: var(--nigeria-green-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,135,81,0.3);
+}
+
+.btn-outline-nigeria {
+    color: var(--eforum-primary);
+    border: 2px solid var(--eforum-primary);
+    background: transparent;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-nigeria:hover {
+    background: var(--eforum-primary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Forum Category Cards */
+.category-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--eforum-gradient-primary);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-hover);
+    border-color: var(--eforum-primary);
+}
+
+.category-card:hover::before {
+    transform: scaleY(1);
+}
+
+/* Visa Category Specific */
+.category-visa {
+    border-left: 4px solid #3498db;
+}
+
+.category-job {
+    border-left: 4px solid #f39c12;
+}
+
+.category-relationship {
+    border-left: 4px solid #e91e63;
+}
+
+/* User Reputation Display */
+.reputation-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.reputation-expert {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #795548;
+}
+
+.reputation-advanced {
+    background: linear-gradient(135deg, #9c27b0 0%, #ba68c8 100%);
+    color: white;
+}
+
+.reputation-intermediate {
+    background: linear-gradient(135deg, #2196f3 0%, #64b5f6 100%);
+    color: white;
+}
+
+.reputation-contributor {
+    background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);
+    color: white;
+}
+
+/* Job Posting Cards */
+.job-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.job-card-featured {
+    border: 2px solid var(--eforum-primary);
+    position: relative;
+}
+
+.job-card-featured::before {
+    content: 'Featured';
+    position: absolute;
+    top: -1px;
+    right: 20px;
+    background: var(--eforum-gradient-primary);
+    color: white;
+    padding: 4px 16px;
+    border-radius: 0 0 8px 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.visa-sponsorship-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+[data-theme="dark"] .visa-sponsorship-badge {
+    background: #1976d2;
+    color: white;
+}
+
+/* Visa Timeline */
+.visa-timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.visa-timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border-color);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -26px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 3px solid var(--eforum-primary);
+}
+
+.timeline-marker.completed {
+    background: var(--eforum-primary);
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .category-card {
+        padding: 1rem;
+    }
+    
+    .job-card {
+        padding: 1rem;
+    }
+    
+    .visa-timeline {
+        padding-left: 1.5rem;
+    }
+}
+
+/* Performance: Prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    :root {
+        --eforum-primary: #006940;
+        --card-shadow: 0 0 0 2px currentColor;
+    }
+    
+    .btn-nigeria {
+        border: 2px solid currentColor;
+    }
+}

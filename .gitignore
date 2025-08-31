@@ -1,0 +1,96 @@
+# Laravel
+/vendor/
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment files
+.env
+.env.backup
+.env.production
+
+# Laravel cache files
+bootstrap/cache/
+storage/*.key
+storage/app/public/
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/testing/*
+storage/framework/views/*
+storage/logs/*
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+.project
+.phpstorm.meta.php
+_ide_helper.php
+_ide_helper_models.php
+.phpunit.result.cache
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Compiled assets
+public/hot
+public/storage
+public/mix-manifest.json
+public/css/app.css
+public/js/app.js
+
+# Laravel Horizon
+/public/vendor/horizon
+
+# Laravel Nova
+/public/vendor/nova
+
+# Database
+*.sqlite
+*.sqlite-journal
+
+# Backup files
+*.bak
+*.backup
+
+# Logs
+*.log
+
+# Testing
+.phpunit.result.cache
+.php_cs.cache
+
+# Composer
+composer.phar
+
+# NPM/Yarn
+package-lock.json
+yarn.lock
+
+# User uploads (but keep the directories)
+public/uploads/*
+!public/uploads/.gitkeep
+storage/app/public/*
+!storage/app/public/.gitkeep
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+
+# Build artifacts
+/build/
+/dist/
+
+# Documentation build
+/docs/_build/
+
+# Coverage reports
+/coverage/
+/report/
+
+# Laravel Telescope
+/public/vendor/telescope

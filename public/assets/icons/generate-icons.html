@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate eForum Icons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .icon-container {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        canvas {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .download-btn {
+            background: #008751;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Icon sizes for PWA
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        
+        // Generate icons
+        sizes.forEach(size => {
+            const container = document.createElement('div');
+            container.className = 'icon-container';
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Nigerian green background
+            ctx.fillStyle = '#008751';
+            ctx.fillRect(0, 0, size, size);
+            
+            // White circle in center
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size * 0.3, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Green "e" in center
+            ctx.fillStyle = '#008751';
+            ctx.font = `bold ${size * 0.4}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('e', size/2, size/2);
+            
+            container.appendChild(canvas);
+            
+            // Add download link
+            const link = document.createElement('a');
+            link.className = 'download-btn';
+            link.download = `icon-${size}x${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.textContent = `Download ${size}x${size}`;
+            container.appendChild(link);
+            
+            document.body.appendChild(container);
+        });
+        
+        // Generate special icons
+        const specialIcons = [
+            { name: 'visa-icon', symbol: '✈️', size: 96 },
+            { name: 'jobs-icon', symbol: '💼', size: 96 },
+            { name: 'post-icon', symbol: '✏️', size: 96 },
+            { name: 'badge-72x72', symbol: 'e', size: 72 }
+        ];
+        
+        specialIcons.forEach(icon => {
+            const container = document.createElement('div');
+            container.className = 'icon-container';
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = icon.size;
+            canvas.height = icon.size;
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Background
+            ctx.fillStyle = '#f0f0f0';
+            ctx.fillRect(0, 0, icon.size, icon.size);
+            
+            // Icon
+            ctx.font = `${icon.size * 0.6}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(icon.symbol, icon.size/2, icon.size/2);
+            
+            container.appendChild(canvas);
+            
+            const link = document.createElement('a');
+            link.className = 'download-btn';
+            link.download = `${icon.name}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.textContent = `Download ${icon.name}`;
+            container.appendChild(link);
+            
+            document.body.appendChild(container);
+        });
+    </script>
+</body>
+</html>
