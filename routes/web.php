@@ -621,3 +621,8 @@ Route::prefix('visa')->group(function () {
     Route::post('/{id}/timeline', [VisaTrackingController::class, 'addTimelineEvent'])->name('visa.timeline')->middleware('auth');
     Route::post('/{id}/checklist', [VisaTrackingController::class, 'updateChecklist'])->name('visa.checklist')->middleware('auth');
 });
+
+// API Documentation Route
+Route::get('/api/docs', function () {
+    return view('api.docs');
+})->name('api.docs');
