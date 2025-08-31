@@ -382,6 +382,129 @@ GET /api/v1/visa-trackings/statistics
 }
 ```
 
+## 🔑 API Key Management
+
+### Get API Keys
+```http
+GET /api/v1/api-keys
+Authorization: Bearer {token}
+```
+
+### Create API Key Request
+```http
+POST /api/v1/api-keys
+Authorization: Bearer {token}
+```
+
+**Request Body:**
+```json
+{
+    "name": "My Application",
+    "permissions": ["read", "write"],
+    "rate_limit": 120,
+    "expires_at": "2024-12-31T23:59:59Z",
+    "notes": "For my mobile app integration"
+}
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "API key request submitted successfully. It will be reviewed by administrators.",
+    "data": {
+        "api_key": {
+            "id": 1,
+            "name": "My Application",
+            "status": "pending",
+            "created_at": "2024-01-20T10:00:00Z",
+            "notes": "For my mobile app integration"
+        }
+    }
+}
+```
+
+### Get API Key Details
+```http
+GET /api/v1/api-keys/{id}
+Authorization: Bearer {token}
+```
+
+### Get Actual API Key (Approved Keys Only)
+```http
+GET /api/v1/api-keys/{id}/key
+Authorization: Bearer {token}
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "API key retrieved successfully",
+    "data": {
+        "api_key": {
+            "id": 1,
+            "name": "My Application",
+            "key": "ef_abc123def456ghi789jkl012mno345pqr678stu901vwx234yz",
+            "permissions": ["read", "write"],
+            "rate_limit": 120,
+            "expires_at": "2024-12-31T23:59:59Z"
+        }
+    }
+}
+```
+
+### Update API Key (Pending Only)
+```http
+PUT /api/v1/api-keys/{id}
+Authorization: Bearer {token}
+```
+
+### Delete API Key
+```http
+DELETE /api/v1/api-keys/{id}
+Authorization: Bearer {token}
+```
+
+## 🔐 Using API Keys
+
+Once you have an approved API key, you can use it to authenticate API requests:
+
+```http
+GET /api/v1/jobs
+X-API-Key: ef_abc123def456ghi789jkl012mno345pqr678stu901vwx234yz
+```
+
+Or using the Authorization header:
+
+```http
+GET /api/v1/jobs
+Authorization: ef_abc123def456ghi789jkl012mno345pqr678stu901vwx234yz
+```
+
+## 📊 API Key Permissions
+
+- **read**: Access to read-only endpoints (GET requests)
+- **write**: Access to create, update, and delete endpoints (POST, PUT, DELETE requests)
+- **admin**: Full administrative access (use with caution)
+
+## ⚡ Rate Limiting
+
+Each API key has its own rate limit:
+- **Default**: 120 requests per minute
+- **Customizable**: Set during key creation (10-1000 requests per minute)
+- **Per-key tracking**: Each key is tracked separately
+
+## 🔄 API Key Lifecycle
+
+1. **Request**: User submits API key request
+2. **Review**: Admin reviews the request
+3. **Approval/Rejection**: Admin approves or rejects with reason
+4. **Active**: Approved keys can be used for API access
+5. **Monitoring**: Usage is tracked and monitored
+6. **Suspension**: Keys can be suspended for violations
+7. **Expiration**: Keys can have expiration dates
+
 ## 🔍 Error Responses
 
 ### Validation Error (422)

@@ -626,3 +626,16 @@ Route::prefix('visa')->group(function () {
 Route::get('/api/docs', function () {
     return view('api.docs');
 })->name('api.docs');
+
+// Admin API Key Management Routes
+Route::prefix('admin/api-keys')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/', [\App\Http\Controllers\Admin\ApiKeyController::class, 'index'])->name('admin.api-keys.index');
+    Route::get('/statistics', [\App\Http\Controllers\Admin\ApiKeyController::class, 'statistics'])->name('admin.api-keys.statistics');
+    Route::get('/{apiKey}', [\App\Http\Controllers\Admin\ApiKeyController::class, 'show'])->name('admin.api-keys.show');
+    Route::post('/{apiKey}/approve', [\App\Http\Controllers\Admin\ApiKeyController::class, 'approve'])->name('admin.api-keys.approve');
+    Route::post('/{apiKey}/reject', [\App\Http\Controllers\Admin\ApiKeyController::class, 'reject'])->name('admin.api-keys.reject');
+    Route::post('/{apiKey}/suspend', [\App\Http\Controllers\Admin\ApiKeyController::class, 'suspend'])->name('admin.api-keys.suspend');
+    Route::post('/{apiKey}/reactivate', [\App\Http\Controllers\Admin\ApiKeyController::class, 'reactivate'])->name('admin.api-keys.reactivate');
+    Route::delete('/{apiKey}', [\App\Http\Controllers\Admin\ApiKeyController::class, 'destroy'])->name('admin.api-keys.destroy');
+    Route::post('/bulk-action', [\App\Http\Controllers\Admin\ApiKeyController::class, 'bulkAction'])->name('admin.api-keys.bulk-action');
+});

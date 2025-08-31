@@ -362,4 +362,12 @@ class User extends Authenticatable implements ReactsInterface, BannableInterface
             ->withPivot('endorsement_count', 'is_verified', 'verified_at')
             ->withTimestamps();
     }
+
+    /**
+     * Get the API keys for the user
+     */
+    public function apiKeys()
+    {
+        return $this->hasMany(ApiKey::class);
+    }
 }

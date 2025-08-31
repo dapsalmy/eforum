@@ -73,5 +73,6 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\AdminAccess::class,
         'check-subscription' => \App\Http\Middleware\CheckSubscription::class,
         'require-2fa' => \App\Http\Middleware\RequireTwoFactorAuthentication::class,
+        'api-key' => \App\Http\Middleware\ApiKeyAuth::class,
     ];
 }

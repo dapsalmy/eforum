@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JobController;
 use App\Http\Controllers\Api\VisaController;
+use App\Http\Controllers\Api\ApiKeyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,14 @@ Route::prefix('v1')->group(function () {
         Route::get('/my/visa-trackings', [VisaController::class, 'myTrackings']);
         Route::post('/visa-trackings/{id}/timeline', [VisaController::class, 'addTimelineEvent']);
         Route::put('/visa-trackings/{id}/checklist', [VisaController::class, 'updateChecklist']);
+
+        // API Key Management Routes
+        Route::get('/api-keys', [ApiKeyController::class, 'index']);
+        Route::post('/api-keys', [ApiKeyController::class, 'store']);
+        Route::get('/api-keys/{id}', [ApiKeyController::class, 'show']);
+        Route::put('/api-keys/{id}', [ApiKeyController::class, 'update']);
+        Route::delete('/api-keys/{id}', [ApiKeyController::class, 'destroy']);
+        Route::get('/api-keys/{id}/key', [ApiKeyController::class, 'getKey']);
     });
 });
 
