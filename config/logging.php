@@ -57,6 +57,11 @@ return [
             'channels' => ['single'],
             'ignore_exceptions' => false,
         ],
+        'sentry' => [
+            'driver' => 'sentry',
+            'level' => env('LOG_LEVEL', 'error'),
+            'bubble' => true,
+        ],
 
         'single' => [
             'driver' => 'single',

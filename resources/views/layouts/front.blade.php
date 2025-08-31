@@ -9,6 +9,9 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    @if(app()->environment('production'))
+    <meta http-equiv="Cache-Control" content="no-store"/>
+    @endif
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @if (Route::is('home.posts'))
         <title>{{ trans('discussions') }} - {{ get_setting('site_name') }}</title>

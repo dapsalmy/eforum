@@ -16,7 +16,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Register Sentry logging channel if DSN present
+        if (env('SENTRY_LARAVEL_DSN')) {
+            config(['logging.channels.stack.channels' => array_unique(array_merge(
+                config('logging.channels.stack.channels', ['single']),
+                ['sentry']
+            ))]);
+        }
     }
 
     /**
