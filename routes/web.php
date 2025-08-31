@@ -639,3 +639,18 @@ Route::prefix('admin/api-keys')->middleware(['auth', 'admin'])->group(function (
     Route::delete('/{apiKey}', [\App\Http\Controllers\Admin\ApiKeyController::class, 'destroy'])->name('admin.api-keys.destroy');
     Route::post('/bulk-action', [\App\Http\Controllers\Admin\ApiKeyController::class, 'bulkAction'])->name('admin.api-keys.bulk-action');
 });
+
+// Admin Advertisement Management Routes
+Route::prefix('admin/advertisements')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/', [\App\Http\Controllers\Admin\AdvertisementController::class, 'index'])->name('admin.advertisements.index');
+    Route::get('/create', [\App\Http\Controllers\Admin\AdvertisementController::class, 'create'])->name('admin.advertisements.create');
+    Route::post('/', [\App\Http\Controllers\Admin\AdvertisementController::class, 'store'])->name('admin.advertisements.store');
+    Route::get('/{advertisement}', [\App\Http\Controllers\Admin\AdvertisementController::class, 'show'])->name('admin.advertisements.show');
+    Route::get('/{advertisement}/edit', [\App\Http\Controllers\Admin\AdvertisementController::class, 'edit'])->name('admin.advertisements.edit');
+    Route::put('/{advertisement}', [\App\Http\Controllers\Admin\AdvertisementController::class, 'update'])->name('admin.advertisements.update');
+    Route::post('/{advertisement}/approve', [\App\Http\Controllers\Admin\AdvertisementController::class, 'approve'])->name('admin.advertisements.approve');
+    Route::post('/{advertisement}/reject', [\App\Http\Controllers\Admin\AdvertisementController::class, 'reject'])->name('admin.advertisements.reject');
+    Route::post('/{advertisement}/pause', [\App\Http\Controllers\Admin\AdvertisementController::class, 'pause'])->name('admin.advertisements.pause');
+    Route::post('/{advertisement}/resume', [\App\Http\Controllers\Admin\AdvertisementController::class, 'resume'])->name('admin.advertisements.resume');
+    Route::delete('/{advertisement}', [\App\Http\Controllers\Admin\AdvertisementController::class, 'destroy'])->name('admin.advertisements.destroy');
+});
