@@ -292,8 +292,21 @@ class ReputationController extends Controller
             if ($user->reputation_score >= $threshold && !$user->hasBadge($badge)) {
                 $user->awardBadge($badge);
                 
-                // Send notification
-                // TODO: Send milestone achievement notification
+                // Send notification (in-app)
+                \App\Models\Notifications::create([
+                    'sender_id' => 0,
+                    'recipient_id' => $user->id,
+                    'notification_type' => 'milestone_achieved',
+                    'seen' => 2,
+                ]);
+                // Optionally send email (best-effort)
+                try {
+                    $content = (object) [
+                        'subject' => 'Milestone Achieved: '.$badge,
+                        'body' => '<p>Congrats '.$user->name.'! You just reached the '.$badge.' milestone.</p>',
+                    ];
+                    \Mail::to($user->email)->queue(new \App\Mail\GeneralMail($content));
+                } catch (\Throwable $e) {}
             }
         }
 

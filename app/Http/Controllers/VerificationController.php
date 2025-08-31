@@ -7,6 +7,10 @@ use App\Models\VerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\GeneralMail;
+use App\Models\Notifications as InAppNotification;
+use App\Models\User as AppUser;
 use Illuminate\Support\Str;
 
 class VerificationController extends Controller
@@ -124,8 +128,31 @@ class VerificationController extends Controller
         // Award points for verification attempt
         $user->awardPoints('verification_attempt', 10, 'verification', $verificationRequest->id);
 
-        // Notify admins
-        // TODO: Send notification to admins
+        // Notify admins (in-app + email)
+        $admins = AppUser::whereIn('role', ['Admin','Moderator'])->get(['id','email','name']);
+        foreach ($admins as $admin) {
+            // In-app notification
+            InAppNotification::create([
+                'sender_id' => $user->id,
+                'recipient_id' => $admin->id,
+                'notification_type' => 'verification_request',
+                'seen' => 2,
+            ]);
+
+            // Email notification
+            try {
+                $content = (object) [
+                    'subject' => 'New Verification Request Submitted',
+                    'body' => view('emails.content-moderation', [
+                        'title' => 'New Verification Request',
+                        'message' => $user->name.' submitted a verification request ('.$verificationRequest->verification_type.').',
+                    ])->render(),
+                ];
+                Mail::to($admin->email)->queue(new GeneralMail($content));
+            } catch (\Throwable $e) {
+                // Fail silently; logging can be added if needed
+            }
+        }
 
         return redirect()->route('verification.index')
             ->with('success', 'Your verification request has been submitted successfully. We will review it within 2-3 business days.');
@@ -207,8 +234,24 @@ class VerificationController extends Controller
             $user->awardBadge($badgeName);
         }
 
-        // Send notification to user
-        // TODO: Send email notification
+        // Send notification to user (in-app + email)
+        InAppNotification::create([
+            'sender_id' => Auth::id(),
+            'recipient_id' => $user->id,
+            'notification_type' => 'verification_approved',
+            'seen' => 2,
+        ]);
+
+        try {
+            $content = (object) [
+                'subject' => 'Your Verification Was Approved',
+                'body' => view('emails.payment-confirmation', [
+                    'title' => 'Verification Approved',
+                    'message' => 'Congratulations! Your verification request has been approved.',
+                ])->render(),
+            ];
+            Mail::to($user->email)->queue(new GeneralMail($content));
+        } catch (\Throwable $e) {}
 
         return redirect()->route('admin.verifications.index')
             ->with('success', 'Verification request approved successfully.');
@@ -234,8 +277,24 @@ class VerificationController extends Controller
             'reviewed_at' => now(),
         ]);
 
-        // Send notification to user with rejection reason
-        // TODO: Send email notification
+        // Notify user (in-app + email) with rejection reason
+        InAppNotification::create([
+            'sender_id' => Auth::id(),
+            'recipient_id' => $verificationRequest->user_id,
+            'notification_type' => 'verification_rejected',
+            'seen' => 2,
+        ]);
+
+        try {
+            $content = (object) [
+                'subject' => 'Your Verification Was Rejected',
+                'body' => view('emails.content-moderation', [
+                    'title' => 'Verification Rejected',
+                    'message' => 'We are sorry, your verification request was rejected. Reason: '.$validated['rejection_reason'],
+                ])->render(),
+            ];
+            Mail::to($verificationRequest->user->email)->queue(new GeneralMail($content));
+        } catch (\Throwable $e) {}
 
         return redirect()->route('admin.verifications.index')
             ->with('success', 'Verification request rejected.');
