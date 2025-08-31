@@ -405,6 +405,7 @@ Route::group(['prefix' =>'admin', 'middleware' => ['auth', 'admin']], function()
     //Email Settings
     Route::get('/settings/mail', [EmailController::class, 'index'])->name('admin.settings.mail');
 	Route::post('/settings/mail', [EmailController::class, 'update']);
+    Route::post('/settings/mail/test', [EmailController::class, 'test'])->name('admin.settings.mail.test');
 
 	//Languages Settings
     Route::get('/languages/list', [LanguageController::class, 'index'])->name('admin.languages.index');

@@ -51,6 +51,14 @@ class EmailController extends Controller
                     overWriteEnvFile('MAIL_FROM_NAME',trim($value));
                 }
 
+                if($type == 'mail_from_domain'){
+                    overWriteEnvFile('MAIL_FROM_DOMAIN',trim($value));
+                }
+
+                if($type == 'mail_return_path'){
+                    overWriteEnvFile('MAIL_RETURN_PATH',trim($value));
+                }
+
                 // Amazon SES Settings
                 if($type == 'aws_access_key_id'){
                     overWriteEnvFile('AWS_ACCESS_KEY_ID',trim($value));
@@ -72,5 +80,44 @@ class EmailController extends Controller
         }
 
         return redirect()->back()->with('success', 'Mail Configuration has been updated Successfully');
+    }
+
+    public function test(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        try {
+            \Mail::raw('This is a test email from ' . get_setting('site_name') . ' to verify your email configuration is working correctly.', function ($message) use ($request) {
+                $message->to($request->email)
+                    ->subject('Test Email from ' . get_setting('site_name'));
+                
+                // Set return path if configured
+                if (config('mail.return_path')) {
+                    $message->returnPath(config('mail.return_path'));
+                }
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Test email sent successfully! Please check your inbox (and spam folder).'
+            ]);
+        } catch (\Exception $e) {
+            $errorMessage = 'Failed to send email: ' . $e->getMessage();
+            
+            if (strpos($e->getMessage(), 'Connection could not be established') !== false) {
+                $errorMessage = 'Connection failed. Please check your mail server settings.';
+            } elseif (strpos($e->getMessage(), 'authentication') !== false) {
+                $errorMessage = 'Authentication failed. Please check your username and password.';
+            } elseif (strpos($e->getMessage(), 'verify') !== false && config('mail.default') === 'ses') {
+                $errorMessage = 'Email/domain not verified in Amazon SES. Please verify it first.';
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => $errorMessage
+            ]);
+        }
     }
 }

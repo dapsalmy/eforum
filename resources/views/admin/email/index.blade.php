@@ -61,16 +61,37 @@
                             <input type="text" name="mail_encryption" value="{{env('MAIL_ENCRYPTION')}}" placeholder="MAIL ENCRYPTION e.g SSL/TLS" />
                           </div>
                         </div>
+                        
+                        <div class="col-12">
+                          <hr>
+                          <h5 class="mb-3">Common Email Settings (SMTP & SES)</h5>
+                        </div>
                         <div class="col-12">
                           <div class="input-style-1">
                             <label>MAIL FROM ADDRESS</label>
-                            <input type="text" name="mail_from_address" value="{{env('MAIL_FROM_ADDRESS')}}" placeholder="MAIL FROM ADDRESS" />
+                            <input type="email" name="mail_from_address" value="{{env('MAIL_FROM_ADDRESS')}}" placeholder="noreply@yourdomain.com" />
+                            <p class="text-muted small">The email address that will appear in the "From" field</p>
                           </div>
                         </div>
                         <div class="col-12">
                           <div class="input-style-1">
                             <label>MAIL FROM NAME</label>
-                            <input type="text" name="mail_from_name" value="{{env('MAIL_FROM_NAME')}}" placeholder="MAIL FROM NAME" />
+                            <input type="text" name="mail_from_name" value="{{env('MAIL_FROM_NAME')}}" placeholder="{{ get_setting('site_name') }}" />
+                            <p class="text-muted small">The name that will appear in the "From" field</p>
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <div class="input-style-1">
+                            <label>MAIL FROM DOMAIN</label>
+                            <input type="text" name="mail_from_domain" value="{{env('MAIL_FROM_DOMAIN')}}" placeholder="yourdomain.com" />
+                            <p class="text-muted small">Your verified sending domain (required for SES, recommended for SMTP)</p>
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <div class="input-style-1">
+                            <label>RETURN PATH / BOUNCE ADDRESS</label>
+                            <input type="email" name="mail_return_path" value="{{env('MAIL_RETURN_PATH')}}" placeholder="bounces@yourdomain.com" />
+                            <p class="text-muted small">Email address to receive bounce notifications (leave empty to use FROM address)</p>
                           </div>
                         </div>
 
@@ -107,6 +128,7 @@
 
                         <div class="col-12">
                           <button type="submit" class="main-btn primary-btn btn-hover">{{ trans('submit') }}</button>
+                          <a href="#" onclick="testEmailConfig(event)" class="main-btn secondary-btn btn-hover ms-2">Test Email Configuration</a>
                         </div>
                       </div>
 
@@ -122,31 +144,38 @@
                 <div class="card-body">
                     <h6 class="text-danger small mb-4">Please be careful when configuring email settings. Incorrect configuration will cause email sending failures.</h6>
                     
-                    <h5 class="text-primary my-3">SMTP Configuration</h5>
-                    <h6 class="text-muted my-2">For Non-SSL</h6>
+                    <h5 class="text-primary my-3">General Email Setup</h5>
                     <ul class="list-group">
-                        <li class="list-group-item text-dark">Select sendmail for Mail Driver if you face any issue after configuring smtp as Mail Driver </li>
-                        <li class="list-group-item text-dark">Set Mail Host according to your server Mail Client Manual Settings</li>
-                        <li class="list-group-item text-dark">Set Mail port as 587</li>
-                        <li class="list-group-item text-dark">Set Mail Encryption as ssl if you face issue with tls</li>
+                        <li class="list-group-item text-dark"><strong>From Domain:</strong> Use your verified domain (e.g., yourdomain.com)</li>
+                        <li class="list-group-item text-dark"><strong>From Address:</strong> Use an email on your domain (e.g., noreply@yourdomain.com)</li>
+                        <li class="list-group-item text-dark"><strong>Return Path:</strong> Set up a bounce handler email (e.g., bounces@yourdomain.com)</li>
+                        <li class="list-group-item text-dark"><strong>SPF/DKIM:</strong> Configure DNS records for better deliverability</li>
+                    </ul>
+                    
+                    <h5 class="text-primary my-3 mt-4">SMTP Configuration</h5>
+                    <h6 class="text-muted my-2">For Non-SSL (Port 587)</h6>
+                    <ul class="list-group">
+                        <li class="list-group-item text-dark">Use TLS encryption for port 587</li>
+                        <li class="list-group-item text-dark">Common hosts: smtp.gmail.com, smtp.office365.com, smtp.sendgrid.net</li>
+                        <li class="list-group-item text-dark">Ensure your SMTP provider allows authentication</li>
                     </ul>
                     <br>
-                    <h6 class="text-muted my-2">For SSL</h6>
+                    <h6 class="text-muted my-2">For SSL (Port 465)</h6>
                     <ul class="list-group">
-                        <li class="list-group-item text-dark">Select sendmail for Mail Driver if you face any issue after configuring smtp as Mail Driver</li>
-                        <li class="list-group-item text-dark">Set Mail Host according to your server Mail Client Manual Settings</li>
-                        <li class="list-group-item text-dark">Set Mail port as 465</li>
-                        <li class="list-group-item text-dark">Set Mail Encryption as ssl</li>
+                        <li class="list-group-item text-dark">Use SSL encryption for port 465</li>
+                        <li class="list-group-item text-dark">Some providers require app-specific passwords</li>
+                        <li class="list-group-item text-dark">Check firewall settings if connection fails</li>
                     </ul>
                     
                     <h5 class="text-primary my-3 mt-4">Amazon SES Configuration</h5>
                     <ul class="list-group">
-                        <li class="list-group-item text-dark">Select 'Amazon SES' as Mail Mailer</li>
-                        <li class="list-group-item text-dark">Create an IAM user with SES send permissions</li>
-                        <li class="list-group-item text-dark">Verify your sending domain or email address in SES</li>
-                        <li class="list-group-item text-dark">Common regions: us-east-1, eu-west-1, ap-southeast-1</li>
-                        <li class="list-group-item text-dark">Leave SMTP fields empty when using SES</li>
-                        <li class="list-group-item text-dark">Test with sandbox first before requesting production access</li>
+                        <li class="list-group-item text-dark"><strong>Step 1:</strong> Select 'Amazon SES' as Mail Mailer</li>
+                        <li class="list-group-item text-dark"><strong>Step 2:</strong> Verify your domain in SES console (adds DKIM automatically)</li>
+                        <li class="list-group-item text-dark"><strong>Step 3:</strong> Create IAM user with AmazonSESFullAccess policy</li>
+                        <li class="list-group-item text-dark"><strong>Step 4:</strong> Configure Return Path (Mail From) domain in SES</li>
+                        <li class="list-group-item text-dark"><strong>Regions:</strong> us-east-1, eu-west-1, ap-southeast-1</li>
+                        <li class="list-group-item text-dark"><strong>Note:</strong> Start in sandbox mode, request production access later</li>
+                        <li class="list-group-item text-dark"><strong>Bounce Handling:</strong> SES can send bounces to Return Path email</li>
                     </ul>
                 </div>
             </div>
@@ -159,4 +188,47 @@
 
   </main>
 
+@endsection
+
+@section('scripts')
+<script>
+function testEmailConfig(e) {
+    e.preventDefault();
+    
+    const email = prompt("Enter email address to send test email to:", "{{ auth()->user()->email }}");
+    
+    if (email) {
+        // Show loading
+        const btn = e.target;
+        const originalText = btn.innerText;
+        btn.innerText = "Sending test email...";
+        btn.disabled = true;
+        
+        // Make AJAX request to test email
+        fetch("{{ route('admin.settings.mail.test') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ email: email })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                toastr.success(data.message);
+            } else {
+                toastr.error(data.message);
+            }
+        })
+        .catch(error => {
+            toastr.error('Failed to send test email. Please check your configuration.');
+        })
+        .finally(() => {
+            btn.innerText = originalText;
+            btn.disabled = false;
+        });
+    }
+}
+</script>
 @endsection

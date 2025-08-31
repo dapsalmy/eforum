@@ -105,6 +105,30 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Mail "From" Domain
+    |--------------------------------------------------------------------------
+    |
+    | This is the domain that will be used for domain verification with
+    | providers like Amazon SES. It should match your sending domain.
+    |
+    */
+
+    'from_domain' => env('MAIL_FROM_DOMAIN', null),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Return Path
+    |--------------------------------------------------------------------------
+    |
+    | The return path (bounce address) for emails. If not set, the from
+    | address will be used. This is important for bounce handling.
+    |
+    */
+
+    'return_path' => env('MAIL_RETURN_PATH', null),
+
+    /*
+    |--------------------------------------------------------------------------
     | Markdown Mail Settings
     |--------------------------------------------------------------------------
     |
