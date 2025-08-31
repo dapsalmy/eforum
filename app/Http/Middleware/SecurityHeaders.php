@@ -17,29 +17,40 @@ class SecurityHeaders
     {
         $response = $next($request);
 
-        // Security Headers for eForum
-        $response->headers->set('X-Content-Type-Options', 'nosniff');
+        // Security Headers
         $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
+        $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('X-XSS-Protection', '1; mode=block');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->headers->set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
         
         // Content Security Policy
         $csp = "default-src 'self'; " .
-               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://api.giphy.com; " .
+               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com; " .
                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " .
-               "font-src 'self' https://fonts.gstatic.com data:; " .
-               "img-src 'self' data: https: blob:; " .
-               "connect-src 'self' https://www.google.com https://api.giphy.com; " .
-               "frame-src 'self' https://www.google.com;";
+               "font-src 'self' https://fonts.gstatic.com; " .
+               "img-src 'self' data: https:; " .
+               "connect-src 'self' https://api.paystack.co https://api.flutterwave.com; " .
+               "frame-src 'self' https://www.google.com; " .
+               "object-src 'none'; " .
+               "base-uri 'self'; " .
+               "form-action 'self'; " .
+               "upgrade-insecure-requests;";
         
         $response->headers->set('Content-Security-Policy', $csp);
-        
-        // Strict Transport Security (HSTS) - only on HTTPS
-        if ($request->secure()) {
-            $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+
+        // HSTS (HTTP Strict Transport Security)
+        if (app()->environment('production')) {
+            $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
         }
-        
+
+        // Cache Control for sensitive pages
+        if ($request->is('admin/*') || $request->is('user/*')) {
+            $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+            $response->headers->set('Pragma', 'no-cache');
+            $response->headers->set('Expires', '0');
+        }
+
         return $response;
     }
 }

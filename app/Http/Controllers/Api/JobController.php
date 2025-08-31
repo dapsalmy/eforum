@@ -223,7 +223,28 @@ class JobController extends ApiController
             $job->increment('applications');
 
             // Send notification to job poster
-            // TODO: Implement notification
+            try {
+                \App\Models\Notifications::create([
+                    'sender_id' => $user->id,
+                    'recipient_id' => $job->user_id,
+                    'notification_type' => 'job_application',
+                    'seen' => 2,
+                ]);
+
+                // Email notification
+                $content = (object) [
+                    'subject' => 'New Job Application: ' . $job->title,
+                    'body' => view('emails.job-application', [
+                        'job' => $job,
+                        'applicant' => $user,
+                        'cover_letter' => $validated['cover_letter'] ?? null,
+                    ])->render(),
+                ];
+                \Mail::to($job->user->email)->queue(new \App\Mail\GeneralMail($content));
+            } catch (\Throwable $e) {
+                // Log error but don't fail the application
+                \Log::error('Failed to send job application notification: ' . $e->getMessage());
+            }
 
             return $this->success(null, 'Application submitted successfully');
 
