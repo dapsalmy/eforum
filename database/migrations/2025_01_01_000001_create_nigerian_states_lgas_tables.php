@@ -55,6 +55,7 @@ return new class extends Migration
 
         // Add Nigerian location fields to users table
         Schema::table('users', function (Blueprint $table) {
+            $table->string('address')->nullable();
             $table->foreignId('state_id')->nullable()->after('address')->constrained('nigerian_states')->nullOnDelete();
             $table->foreignId('lga_id')->nullable()->after('state_id')->constrained('nigerian_lgas')->nullOnDelete();
             $table->string('phone_number')->nullable()->after('lga_id');
@@ -70,7 +71,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['state_id']);
             $table->dropForeign(['lga_id']);
-            $table->dropColumn(['state_id', 'lga_id', 'phone_number', 'phone_country_code']);
+            $table->dropColumn(['address', 'state_id', 'lga_id', 'phone_number', 'phone_country_code']);
         });
         
         Schema::dropIfExists('nigerian_banks');

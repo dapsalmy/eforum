@@ -27,8 +27,8 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            // Report to Sentry if configured
-            if (app()->environment('production') && config('logging.channels.sentry')) {
+            // Report to Sentry if configured and in production
+            if (config('app.env') === 'production' && config('logging.channels.sentry') && function_exists('\Sentry\captureException')) {
                 \Sentry\captureException($e);
             }
         });

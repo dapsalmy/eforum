@@ -2,23 +2,29 @@
 
 namespace App\Rules;
 
+use Closure;
 use GuzzleHttp\Client;
-class ReCaptcha
+use Illuminate\Contracts\Validation\ValidationRule;
+
+class ReCaptcha implements ValidationRule
 {
-    public function validate($attribute, $value, $parameters, $validator)
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $client = new Client;
         $response = $client->post(
             'https://www.google.com/recaptcha/api/siteverify',
             [
-                'form_params' =>
-                    [
-                        'secret' => config('services.recaptcha.secretKey'),
-                        'response' => $value
-                    ]
+                'form_params' => [
+                    'secret' => config('services.recaptcha.secretKey'),
+                    'response' => $value
+                ]
             ]
         );
+        
         $body = json_decode((string)$response->getBody());
-        return $body->success;
+        
+        if (!$body->success) {
+            $fail('The reCAPTCHA verification failed.');
+        }
     }
 }

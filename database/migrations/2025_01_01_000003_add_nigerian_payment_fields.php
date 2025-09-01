@@ -14,69 +14,69 @@ return new class extends Migration
         // Add Nigerian payment fields to transactions table
         Schema::table('transactions', function (Blueprint $table) {
             if (!Schema::hasColumn('transactions', 'currency')) {
-                $table->string('currency', 3)->default('NGN')->after('amount');
+                $table->string('currency', 3)->default('NGN');
             }
             if (!Schema::hasColumn('transactions', 'gateway')) {
-                $table->string('gateway')->nullable()->after('payment_method');
+                $table->string('gateway')->nullable();
             }
             if (!Schema::hasColumn('transactions', 'reference')) {
-                $table->string('reference')->unique()->nullable()->after('transaction_id');
+                $table->string('reference')->unique()->nullable();
             }
             if (!Schema::hasColumn('transactions', 'purpose')) {
-                $table->string('purpose')->nullable()->after('reference');
+                $table->string('purpose')->nullable();
             }
             if (!Schema::hasColumn('transactions', 'metadata')) {
-                $table->json('metadata')->nullable()->after('purpose');
+                $table->json('metadata')->nullable();
             }
             if (!Schema::hasColumn('transactions', 'gateway_response')) {
-                $table->json('gateway_response')->nullable()->after('metadata');
+                $table->json('gateway_response')->nullable();
             }
         });
 
         // Add Nigerian payment fields to withdraws table
         Schema::table('withdraws', function (Blueprint $table) {
             if (!Schema::hasColumn('withdraws', 'bank_code')) {
-                $table->string('bank_code')->nullable()->after('bank_name');
+                $table->string('bank_code')->nullable();
             }
             if (!Schema::hasColumn('withdraws', 'currency')) {
-                $table->string('currency', 3)->default('NGN')->after('amount');
+                $table->string('currency', 3)->default('NGN');
             }
             if (!Schema::hasColumn('withdraws', 'gateway')) {
-                $table->string('gateway')->nullable()->after('status');
+                $table->string('gateway')->nullable();
             }
             if (!Schema::hasColumn('withdraws', 'reference')) {
-                $table->string('reference')->unique()->nullable()->after('gateway');
+                $table->string('reference')->unique()->nullable();
             }
             if (!Schema::hasColumn('withdraws', 'transfer_code')) {
-                $table->string('transfer_code')->nullable()->after('reference');
+                $table->string('transfer_code')->nullable();
             }
             if (!Schema::hasColumn('withdraws', 'recipient_code')) {
-                $table->string('recipient_code')->nullable()->after('transfer_code');
+                $table->string('recipient_code')->nullable();
             }
         });
 
         // Add currency field to other money-related tables
         Schema::table('deposits', function (Blueprint $table) {
             if (!Schema::hasColumn('deposits', 'currency')) {
-                $table->string('currency', 3)->default('NGN')->after('amount');
+                $table->string('currency', 3)->default('NGN');
             }
         });
 
         Schema::table('plans', function (Blueprint $table) {
             if (!Schema::hasColumn('plans', 'currency')) {
-                $table->string('currency', 3)->default('NGN')->after('price');
+                $table->string('currency', 3)->default('NGN');
             }
             if (!Schema::hasColumn('plans', 'price_ngn')) {
-                $table->decimal('price_ngn', 10, 2)->nullable()->after('currency');
+                $table->decimal('price_ngn', 10, 2)->nullable();
             }
         });
 
         Schema::table('buy_points', function (Blueprint $table) {
             if (!Schema::hasColumn('buy_points', 'currency')) {
-                $table->string('currency', 3)->default('NGN')->after('price');
+                $table->string('currency', 3)->default('NGN');
             }
             if (!Schema::hasColumn('buy_points', 'price_ngn')) {
-                $table->decimal('price_ngn', 10, 2)->nullable()->after('currency');
+                $table->decimal('price_ngn', 10, 2)->nullable();
             }
         });
 
