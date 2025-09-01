@@ -89,7 +89,7 @@ A modern, feature-rich forum platform designed specifically for the Nigerian com
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/eforum.git
+   git clone https://github.com/dapsalmy/eforum.git
    cd eforum
    ```
 
@@ -112,12 +112,15 @@ A modern, feature-rich forum platform designed specifically for the Nigerian com
    - Storage settings
 
 5. **Database setup**
-   ```bash
-   # Import the database
-   mysql -u your_user -p your_database < database/eforum.sql
    
-   # Or run migrations
+   **For fresh installation (recommended):**
+   ```bash
    php artisan migrate --seed
+   ```
+   
+   **For importing existing data:**
+   ```bash
+   mysql -u your_user -p your_database < database/eforum.sql
    ```
 
 6. **Storage setup**
@@ -173,7 +176,7 @@ Full API documentation available in `/docs/api.md`
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+We welcome contributions! Please contact us for contribution guidelines.
 
 ## 📄 License
 
@@ -185,7 +188,9 @@ For support, email: support@eforum.ng
 
 ## 🙏 Credits
 
-Built with ❤️ for the Nigerian community.
+**Developed by:** Olaoye Samuel Adetayo (DaPsalmy)  
+**Company:** Bolrach Technologies Limited  
+**Built with ❤️ for the Nigerian community**
 
 ---
 
