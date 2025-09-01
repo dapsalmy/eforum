@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JobController;
 use App\Http\Controllers\Api\VisaController;
 use App\Http\Controllers\Api\ApiKeyController;
+use App\Http\Controllers\Api\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,13 @@ Route::prefix('v1')->group(function () {
     Route::get('/visa-trackings/{id}', [VisaController::class, 'show']);
     Route::get('/visa-trackings/statistics', [VisaController::class, 'statistics']);
 
+    // Public Forum Routes
+    Route::get('/posts', [PostController::class, 'index']);
+    Route::get('/posts/categories', [PostController::class, 'categories']);
+    Route::get('/posts/{id}', [PostController::class, 'show']);
+    Route::get('/posts/search', [PostController::class, 'search']);
+    Route::get('/posts/trending', [PostController::class, 'trending']);
+
     // Protected Routes
     Route::middleware('auth:sanctum')->group(function () {
         
@@ -59,6 +67,16 @@ Route::prefix('v1')->group(function () {
         Route::get('/my/visa-trackings', [VisaController::class, 'myTrackings']);
         Route::post('/visa-trackings/{id}/timeline', [VisaController::class, 'addTimelineEvent']);
         Route::put('/visa-trackings/{id}/checklist', [VisaController::class, 'updateChecklist']);
+
+        // Forum Routes
+        Route::post('/posts', [PostController::class, 'store']);
+        Route::put('/posts/{post}', [PostController::class, 'update']);
+        Route::delete('/posts/{post}', [PostController::class, 'destroy']);
+        Route::post('/posts/{postId}/comments', [PostController::class, 'addComment']);
+        Route::post('/comments/{commentId}/replies', [PostController::class, 'addReply']);
+        Route::post('/posts/{postId}/like', [PostController::class, 'toggleLike']);
+        Route::get('/users/{userId}/posts', [PostController::class, 'userPosts']);
+        Route::get('/feed', [PostController::class, 'feed']);
 
         // API Key Management Routes
         Route::get('/api-keys', [ApiKeyController::class, 'index']);
