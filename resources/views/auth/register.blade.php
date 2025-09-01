@@ -28,22 +28,25 @@
                                 <a href="{{ route('home') }}"><img src="{{ my_asset('uploads/settings/'.get_setting('logo_dark')) }}" alt="Logo"></a>
                                 <p class="small mb-4">{{ trans('join_our_awesome_community') }}.</p>
                             </div>
-                            <form id="register_form" method="POST">
+                            <form id="register_form" method="POST" data-validate-form>
                                 @csrf
 
                                 <div class="pb-3">
                                     <label class="form-label">{{ trans('name') }}</label>
-                                    <input type="text" name="name" id="name" placeholder="{{ trans('name') }}">
+                                    <input type="text" name="name" id="name" placeholder="{{ trans('name') }}" 
+                                           data-validate="required|name" autocomplete="name">
                                     <div class="invalid-feedback"></div>
                                 </div>
                                 <div class="pb-3">
                                     <label class="form-label">{{ trans('username') }}</label>
-                                    <input type="text" name="username" id="username" placeholder="{{ trans('username') }}">
+                                    <input type="text" name="username" id="username" placeholder="{{ trans('username') }}" 
+                                           data-validate="required|username" autocomplete="username">
                                     <div class="invalid-feedback"></div>
                                 </div>
                                 <div class="pb-3">
                                     <label class="form-label">{{ trans('gender') }}</label>
-                                    <select name="gender" id="gender">
+                                    <select name="gender" id="gender" data-validate="required">
+                                       <option value="">Select Gender</option>
                                        <option value="Male">{{ trans('male') }}</option>
                                        <option value="Female">{{ trans('female') }}</option>
                                     </select>
@@ -51,13 +54,15 @@
                                 </div>
                                 <div class="pb-3">
                                     <label class="form-label">{{ trans('email') }}</label>
-                                    <input type="text" name="email" id="email" placeholder="name@example.com">
+                                    <input type="email" name="email" id="email" placeholder="name@example.com" 
+                                           data-validate="required|email" autocomplete="email">
                                     <div class="invalid-feedback"></div>
                                 </div>
                                 <div class="pb-3">
                                     <label class="form-label">{{ trans('password') }}</label>
                                     <div class="password-toggle">
-                                        <input type="password" name="password" id="password" placeholder="***********">
+                                        <input type="password" name="password" id="password" placeholder="***********" 
+                                               data-validate="required|password" autocomplete="new-password">
                                         <label class="password-toggle-btn" aria-label="Show/hide password">
                                             <input class="password-toggle-check" id="togglePassword" type="checkbox">
                                             <span class="password-toggle-indicator"></span>
@@ -68,7 +73,8 @@
                                 <div class="pb-3">
                                     <label class="form-label">{{ trans('confirm_password') }}</label>
                                     <div class="password-toggle">
-                                        <input type="password" name="password_confirmation" id="password_confirmation" placeholder="***********">
+                                        <input type="password" name="password_confirmation" id="password_confirmation" placeholder="***********" 
+                                               data-validate="required|password_confirmation" autocomplete="new-password">
                                         <label class="password-toggle-btn" aria-label="Show/hide password">
                                             <input class="password-toggle-check" id="confirmPassword" type="checkbox">
                                             <span class="password-toggle-indicator"></span>
@@ -84,7 +90,7 @@
                                 @endif
 
                                 <div class="form-check m-0 pb-3">
-                                    <input class="form-check-input" type="checkbox" name="terms" id="terms">
+                                    <input class="form-check-input" type="checkbox" name="terms" id="terms" data-validate="required">
                                     <label class="form-check-label" for="terms">{{ trans('i_agree_to_the') }} <a href="{{ route('terms') }}"> {{ trans('terms_and_conditions') }}</a></label>
                                     <div class="invalid-feedback"></div>
                                 </div>
@@ -106,6 +112,7 @@
 @section('scripts')
 
 <script src="https://www.google.com/recaptcha/api.js"></script>
+<script src="{{ asset('assets/js/form-validation.js') }}"></script>
 
 <script>
 

@@ -104,7 +104,12 @@ class NigerianPaymentController extends Controller
             throw new \Exception('Failed to initialize payment');
         } catch (\Exception $e) {
             $transaction->update(['status' => 'failed']);
-            Log::error('Payment initialization failed: ' . $e->getMessage());
+            \App\Services\ErrorTrackingService::reportPaymentError($e, [
+                'transaction_id' => $transaction->id,
+                'gateway' => $gateway,
+                'amount' => $amount,
+                'user_id' => $user->id,
+            ]);
             return $this->errorResponse('Failed to initialize payment. Please try again.');
         }
     }
@@ -200,11 +205,11 @@ class NigerianPaymentController extends Controller
                 return redirect()->route('user.wallet')->with('error', 'Payment verification failed');
                 
             } catch (\GuzzleHttp\Exception\RequestException $e) {
-                Log::error('Payment gateway API error', [
+                \App\Services\ErrorTrackingService::reportPaymentError($e, [
                     'gateway' => $gateway,
                     'reference' => $reference,
-                    'error' => $e->getMessage(),
-                    'response' => $e->hasResponse() ? $e->getResponse()->getBody()->getContents() : null
+                    'response' => $e->hasResponse() ? $e->getResponse()->getBody()->getContents() : null,
+                    'transaction_id' => $transaction->id,
                 ]);
                 
                 // Don't mark as failed immediately for network errors
@@ -217,11 +222,10 @@ class NigerianPaymentController extends Controller
                     'gateway_response' => json_encode(['error' => $e->getMessage()])
                 ]);
                 
-                Log::error('Payment processing error', [
+                \App\Services\ErrorTrackingService::reportPaymentError($e, [
                     'gateway' => $gateway,
                     'reference' => $reference,
-                    'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'transaction_id' => $transaction->id,
                 ]);
                 
                 return redirect()->route('user.wallet')->with('error', 'Payment processing failed. Please contact support.');
