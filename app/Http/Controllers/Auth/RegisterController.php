@@ -188,6 +188,11 @@ class RegisterController extends Controller
 
         }
         else{
+            \App\Services\ErrorTrackingService::reportMessage('User registration failed', 'error', [
+                'email' => $request->email,
+                'username' => $request->username,
+                'plan_id' => $plan->id ?? null,
+            ]);
 
             return response()->json([
                 'status' => 401,

@@ -38,11 +38,12 @@
     <div class="dashboard-card mb-5 mb-xl-10" data-aos="fade-up" data-aos-easing="linear">
         <div class="dashboard-body p-0">
             <h4 class="mb-3">{{ trans('add_funds') }}</h4>
-            <form id="deposit_form" action="{{ route('user.funds.add') }}" method="POST">
+            <form id="deposit_form" action="{{ route('user.funds.add') }}" method="POST" data-validate-form>
                 @csrf
 
                 <div class="form-group">
-                    <input id="onlyNumber" name="amount" min="{{ get_setting('min_deposit') }}" autocomplete="off" placeholder="{{ trans('amount') }} (Min - {{ get_setting('min_deposit') }})" type="number">
+                    <input id="onlyNumber" name="amount" min="{{ get_setting('min_deposit') }}" autocomplete="off" placeholder="{{ trans('amount') }} (Min - {{ get_setting('min_deposit') }})" type="number" data-validate="required|amount">
+                    <div class="invalid-feedback"></div>
                 </div>
                 <div class="deposit-box mt-3 mb-4">
                     <div class="d-flex justify-content-between">
@@ -55,9 +56,13 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <div class="invalid-feedback" id="payment_gateway_error"></div>
+                </div>
+
                 @if(get_setting('paypal_active') == 'Yes')
                     <div class="custom-control custom-radio mb-3">
-                        <input name="payment_gateway" value="PayPal" id="PayPal" class="custom-control-input" type="radio">
+                        <input name="payment_gateway" value="PayPal" id="PayPal" class="custom-control-input" type="radio" data-validate="required">
                         <label class="custom-control-label" for="PayPal">
                             <span><strong>PayPal</strong></span>
                             <small class="w-100 d-block">{{ get_setting('paypal_fee').'%' }} + {{ get_setting('paypal_fee_cents') }}</small>
@@ -68,7 +73,7 @@
 
                 @if(get_setting('stripe_active') == 'Yes')
                     <div class="custom-control custom-radio mb-3">
-                        <input name="payment_gateway" value="Stripe" id="Stripe" class="custom-control-input" type="radio">
+                        <input name="payment_gateway" value="Stripe" id="Stripe" class="custom-control-input" type="radio" data-validate="required">
                         <label class="custom-control-label" for="Stripe">
                             <span><strong>Stripe</strong></span>
                             <small class="w-100 d-block">{{ get_setting('stripe_fee').'%' }} + {{ get_setting('stripe_fee_cents') }}</small>
@@ -128,6 +133,7 @@
 @section('scripts')
 <script src="{{ my_asset('assets/vendors/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ my_asset('assets/vendors/datatables/dataTables.bootstrap5.min.js') }}"></script>
+<script src="{{ asset('assets/js/form-validation.js') }}"></script>
 
 <script>
 

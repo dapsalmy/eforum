@@ -30,18 +30,20 @@
                                     <p class="small mb-4">{{ trans('sign_in_to_your_account_to_continue') }}.</p>
                                 </div>
 
-                                <form id="login_form" method="POST">
+                                <form id="login_form" method="POST" data-validate-form>
                                     @csrf
 
                                     <div class="pb-3">
                                         <label class="form-label rd-input-label focus not-empty">{{ trans('email') }}</label>
-                                        <input type="text" name="email" id="email" placeholder="name@example.com">
+                                        <input type="text" name="email" id="email" placeholder="name@example.com" 
+                                               data-validate="required|email" autocomplete="email">
                                         <div class="invalid-feedback"></div>
                                     </div>
                                     <div class="pb-3">
                                         <label class="form-label rd-input-label focus not-empty">{{ trans('password') }}</label>
                                         <div class="password-toggle">
-                                            <input type="password" name="password" id="password" placeholder="***********">
+                                            <input type="password" name="password" id="password" placeholder="***********"
+                                                   data-validate="required|password" autocomplete="current-password">
                                             <label class="password-toggle-btn" aria-label="Show/hide password">
                                                 <input class="password-toggle-check" id="togglePassword" type="checkbox">
                                                 <span class="password-toggle-indicator"></span>
@@ -112,6 +114,7 @@
 
 @section('scripts')
 <script src="https://www.google.com/recaptcha/api.js"></script>
+<script src="{{ asset('assets/js/form-validation.js') }}"></script>
 
 <script>
 

@@ -95,6 +95,11 @@ class LoginController extends Controller
                     ]);
 
                 }else{
+                    \App\Services\ErrorTrackingService::reportAuthError('Login failed - invalid credentials', [
+                        'email' => $request->email,
+                        'ip' => $request->ip(),
+                        'user_agent' => $request->userAgent(),
+                    ]);
 
                     return response()->json([
                        'status' => 401,
@@ -102,6 +107,11 @@ class LoginController extends Controller
                     ]);
                 }
             }else{
+                \App\Services\ErrorTrackingService::reportAuthError('Login failed - user not found', [
+                    'email' => $request->email,
+                    'ip' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                ]);
 
                 return response()->json([
                     'status' => 402,

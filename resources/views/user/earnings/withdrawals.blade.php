@@ -27,12 +27,12 @@
 
     <div class="dashboard-card mb-5 mb-xl-10" data-aos="fade-up" data-aos-easing="linear">
         <div class="dashboard-body">
-            <form id="set_form" method="POST">
+            <form id="set_form" method="POST" data-validate-form>
                 @csrf
                 <div class="row align-items-end pb-3">
                     <div class="col-lg-6 col-sm-7">
                         <label class="form-label fs-base">{{ trans('your') }} PayPal {{ trans('email') }}</label>
-                        <input type="text" name="paypal_email" id="paypal_email" value="{{ Auth::user()->paypal_email }}">
+                        <input type="email" name="paypal_email" id="paypal_email" value="{{ Auth::user()->paypal_email }}" data-validate="required|email">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
@@ -84,6 +84,7 @@
 @section('scripts')
     <script src="{{ my_asset('assets/vendors/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ my_asset('assets/vendors/datatables/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assets/js/form-validation.js') }}"></script>
 
     <script>
 
