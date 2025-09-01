@@ -52,7 +52,7 @@ return [
     /**
      * Custom logo URL
      */
-    'logo' => env('FLUTTERWAVE_LOGO', asset('uploads/settings/logo.png')),
+    'logo' => env('FLUTTERWAVE_LOGO', '/uploads/settings/logo.png'),
 
     /**
      * Custom title

@@ -31,8 +31,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrap();
-        Carbon::setLocale(env('DATE_LANGUAGE'));
-        Validator::extend('recaptcha', 'App\\Rules\\ReCaptcha@validate');
+        Carbon::setLocale(env('DATE_LANGUAGE', 'en'));
 
         // Enforce HTTPS URLs in production
         if (App::environment('production')) {
